@@ -4,6 +4,7 @@ import { AppProvider } from './contexts/AppContext'
 import { Settings } from './components/Settings'
 import { Upload } from './components/Upload'
 import { Scenario } from './components/Scenario'
+import { Render } from './components/Render'
 import './App.css'
 
 type Tab = 'settings' | 'upload' | 'scenario' | 'render'
@@ -44,7 +45,6 @@ function AppContent() {
         <button
           className={`tab-button ${activeTab === 'render' ? 'active' : ''}`}
           onClick={() => setActiveTab('render')}
-          disabled
         >
           🎥 렌더링
         </button>
@@ -55,12 +55,7 @@ function AppContent() {
         {activeTab === 'settings' && <Settings />}
         {activeTab === 'upload' && <Upload />}
         {activeTab === 'scenario' && <Scenario />}
-        {activeTab === 'render' && (
-          <div className="placeholder">
-            <h2>🎥 렌더링</h2>
-            <p>구현 예정</p>
-          </div>
-        )}
+        {activeTab === 'render' && <Render />}
       </main>
 
       {/* 푸터 */}
