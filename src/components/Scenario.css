@@ -1,0 +1,461 @@
+/* src/components/Scenario.css */
+
+.scenario-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.scenario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.scenario-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  color: #333;
+}
+
+.scenario-subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.scenario-status {
+  padding: 8px 16px;
+  background: #d4edda;
+  color: #155724;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.scenario-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 빈 상태 */
+.scenario-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 80px;
+  margin-bottom: 24px;
+}
+
+.scenario-empty h3 {
+  font-size: 24px;
+  margin: 0 0 12px 0;
+  color: #333;
+}
+
+.scenario-empty > p {
+  font-size: 16px;
+  color: #6c757d;
+  margin-bottom: 32px;
+  max-width: 600px;
+}
+
+.generation-info {
+  background: #f8f9fa;
+  padding: 24px;
+  border-radius: 8px;
+  margin-bottom: 32px;
+  text-align: left;
+  max-width: 600px;
+  width: 100%;
+}
+
+.generation-info h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.generation-info ol {
+  margin: 0;
+  padding-left: 24px;
+}
+
+.generation-info li {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #495057;
+  line-height: 1.6;
+}
+
+.btn-generate {
+  font-size: 18px !important;
+  padding: 16px 32px !important;
+}
+
+.warning-text {
+  color: #856404;
+  font-size: 14px;
+  margin-top: 16px;
+}
+
+/* 시나리오 편집기 */
+.scenario-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 요약 카드 */
+.scenario-summary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.summary-card h3 {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.summary-item {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 12px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.summary-label {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.summary-value {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.summary-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.summary-actions .btn {
+  background: rgba(255, 255, 255, 0.9);
+  color: #667eea;
+}
+
+.summary-actions .btn:hover {
+  background: white;
+}
+
+.summary-actions .btn-danger {
+  background: rgba(220, 53, 69, 0.9);
+  color: white;
+}
+
+.summary-actions .btn-danger:hover {
+  background: #dc3545;
+}
+
+/* 장면 목록 */
+.scene-list {
+  background: #f8f9fa;
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.scene-list > h3 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  color: #333;
+}
+
+/* 장면 아이템 */
+.scene-item {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #dee2e6;
+  transition: all 0.2s;
+}
+
+.scene-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.scene-item.opening {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  border: none;
+}
+
+.scene-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.scene-number {
+  font-weight: 600;
+  font-size: 14px;
+  color: #495057;
+}
+
+.scene-item.opening .scene-number {
+  color: white;
+}
+
+.scene-type {
+  padding: 4px 12px;
+  background: #e9ecef;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.scene-type.photo {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.scene-type.video {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.scene-item.opening .scene-type {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.scene-controls {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+
+.btn-control {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #dee2e6;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-control:hover:not(:disabled) {
+  background: #f8f9fa;
+  border-color: #4CAF50;
+}
+
+.btn-control:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.btn-control.btn-delete {
+  color: #dc3545;
+}
+
+.btn-control.btn-delete:hover:not(:disabled) {
+  background: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+/* 장면 콘텐츠 */
+.scene-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scene-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.scene-field label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.scene-item.opening .scene-field label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.scene-input,
+.scene-duration,
+.scene-select {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.scene-input:focus,
+.scene-duration:focus,
+.scene-select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.scene-inline-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.scene-duration {
+  width: 80px;
+}
+
+.duration-label {
+  font-size: 13px;
+  color: #6c757d;
+  margin-left: 6px;
+}
+
+/* 푸터 */
+.scenario-footer {
+  background: #f8f9fa;
+  padding: 24px;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-info p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.footer-info p:first-child {
+  color: #155724;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.footer-hint {
+  color: #6c757d;
+  font-size: 13px;
+}
+
+/* 버튼 */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #4CAF50;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #45a049;
+}
+
+.btn-primary:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+}
+
+.btn-large {
+  padding: 14px 32px;
+  font-size: 16px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .scene-inline-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .scenario-footer {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+/* 스크롤바 */
+.scenario-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scenario-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.scenario-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.scenario-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

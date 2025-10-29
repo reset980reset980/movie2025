@@ -1,0 +1,581 @@
+.render-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  animation: fadeIn 0.3s ease-in;
+}
+
+/* Empty State */
+.render-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+.render-empty-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.render-empty h2 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.render-empty p {
+  font-size: 1rem;
+  color: #888;
+}
+
+/* Summary Section */
+.render-summary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.render-summary h2 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.render-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.render-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.render-summary-label {
+  font-size: 0.875rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.render-summary-value {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+/* Modules Section */
+.render-modules {
+  margin-bottom: 2rem;
+}
+
+.render-modules h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.render-modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.render-module-card {
+  position: relative;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.render-module-card:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+  transform: translateY(-2px);
+}
+
+.render-module-card.active {
+  border-color: #667eea;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.render-module-card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f5f5f5;
+}
+
+.render-module-card.disabled:hover {
+  border-color: #e0e0e0;
+  box-shadow: none;
+  transform: none;
+}
+
+.render-module-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.render-module-card h3 {
+  color: #333;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.render-module-card p {
+  color: #666;
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.render-module-duration {
+  color: #667eea;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.render-module-warning {
+  color: #ff9800;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.render-module-checkbox {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.render-module-checkbox input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #667eea;
+}
+
+/* Estimation Section */
+.render-estimation {
+  margin-bottom: 2rem;
+}
+
+.render-estimation-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.render-estimation-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.render-estimation-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+.render-estimation-value {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #667eea;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.render-estimation-note {
+  font-size: 0.75rem;
+  color: #888;
+  font-weight: normal;
+  margin-top: 0.25rem;
+}
+
+/* Actions */
+.render-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.render-start-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1.25rem 3rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.render-start-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.render-start-button:active {
+  transform: translateY(0);
+}
+
+/* Progress Section */
+.render-progress-section {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.render-progress-section h2 {
+  color: #333;
+  margin: 0 0 2rem 0;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.render-progress-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.render-progress-stages {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.render-progress-stages::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: #e0e0e0;
+  z-index: 0;
+}
+
+.render-progress-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+  z-index: 1;
+}
+
+.render-progress-stage-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  transition: all 0.3s ease;
+}
+
+.render-progress-stage.active .render-progress-stage-icon {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.render-progress-stage.completed .render-progress-stage-icon {
+  border-color: #4CAF50;
+  background: #4CAF50;
+}
+
+.render-progress-stage-label {
+  font-weight: 600;
+  color: #999;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.render-progress-stage.active .render-progress-stage-label,
+.render-progress-stage.completed .render-progress-stage-label {
+  color: #667eea;
+}
+
+.render-progress-stage.completed .render-progress-stage-label {
+  color: #4CAF50;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 20px rgba(102, 126, 234, 0);
+  }
+}
+
+/* Progress Bar */
+.render-progress-bar-container {
+  margin-bottom: 2rem;
+}
+
+.render-progress-bar {
+  width: 100%;
+  height: 30px;
+  background: #e0e0e0;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.render-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  transition: width 0.5s ease;
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.5);
+}
+
+.render-progress-text {
+  text-align: center;
+  font-weight: 600;
+  color: #667eea;
+  font-size: 1rem;
+}
+
+.render-progress-eta {
+  text-align: center;
+  color: #666;
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
+
+.render-progress-module {
+  text-align: center;
+  color: #667eea;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 8px;
+}
+
+/* Complete Section */
+.render-complete {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.render-complete-icon {
+  font-size: 6rem;
+  margin-bottom: 1rem;
+  animation: bounceIn 0.6s ease;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.render-complete h2 {
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+}
+
+.render-complete p {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.render-complete-info {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.render-complete-info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+}
+
+.render-complete-info-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.render-complete-info-value {
+  font-weight: bold;
+  color: #667eea;
+  max-width: 60%;
+  text-align: right;
+  word-break: break-all;
+}
+
+.render-complete-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.render-complete-button {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.render-complete-button.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.render-complete-button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.render-complete-button.secondary {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.render-complete-button.secondary:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .render-container {
+    padding: 1rem;
+  }
+
+  .render-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .render-modules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .render-progress-stages {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .render-progress-stages::before {
+    display: none;
+  }
+
+  .render-progress-stage-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+
+  .render-estimation-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .render-estimation-value {
+    align-items: flex-start;
+  }
+
+  .render-complete-info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .render-complete-info-value {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .render-complete-actions {
+    flex-direction: column;
+  }
+
+  .render-complete-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
