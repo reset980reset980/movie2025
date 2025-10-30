@@ -56,3 +56,15 @@ secrets/
 
 # OS
 Thumbs.db
+
+# 리소스 파일 (용량이 크므로 제외)
+resources/fonts/*.ttf
+resources/fonts/*.otf
+resources/templates/*.png
+resources/templates/*.jpg
+
+# 사용자 업로드 파일
+uploads/
+
+# 렌더링 출력
+GraduationVideos/
