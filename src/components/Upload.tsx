@@ -3,23 +3,12 @@ import React, { useState } from 'react'
 import { useApp } from '../contexts/AppContext'
 import './Upload.css'
 
-interface UploadedFiles {
-  photos: File[]
-  videos: File[]
-  idPhotos: File[]
-  babyPhotos: File[]
-  studentExcel: File | null
+interface Props {
+  onNext: () => void
 }
 
-export const Upload: React.FC = () => {
-  const { settings } = useApp()
-  const [files, setFiles] = useState<UploadedFiles>({
-    photos: [],
-    videos: [],
-    idPhotos: [],
-    babyPhotos: [],
-    studentExcel: null
-  })
+export const Upload: React.FC<Props> = ({ onNext }) => {
+  const { uploadedFiles, setUploadedFiles } = useApp()
   const [uploadStatus, setUploadStatus] = useState<string>('')
 
   // 파일 검증
@@ -52,16 +41,16 @@ export const Upload: React.FC = () => {
     if (category === 'studentExcel') {
       const validated = validateFiles(droppedFiles, 'excel')
       if (validated.length > 0) {
-        setFiles(prev => ({ ...prev, studentExcel: validated[0] }))
+        setUploadedFiles(prev => ({ ...prev, studentExcel: validated[0] }))
         setUploadStatus(`✓ 엑셀 파일 업로드 완료: ${validated[0].name}`)
       }
     } else if (category === 'videos') {
       const validated = validateFiles(droppedFiles, 'video')
-      setFiles(prev => ({ ...prev, videos: [...prev.videos, ...validated] }))
+      setUploadedFiles(prev => ({ ...prev, videos: [...uploadedFiles.videos, ...validated] }))
       setUploadStatus(`✓ ${validated.length}개 영상 파일 추가됨`)
     } else {
       const validated = validateFiles(droppedFiles, 'photo')
-      setFiles(prev => ({ ...prev, [category]: [...prev[category], ...validated] }))
+      setUploadedFiles(prev => ({ ...prev, [category]: [...uploadedFiles[category], ...validated] }))
       setUploadStatus(`✓ ${validated.length}개 사진 파일 추가됨`)
     }
 
@@ -81,16 +70,16 @@ export const Upload: React.FC = () => {
     if (category === 'studentExcel') {
       const validated = validateFiles(selectedFiles, 'excel')
       if (validated.length > 0) {
-        setFiles(prev => ({ ...prev, studentExcel: validated[0] }))
+        setUploadedFiles(prev => ({ ...prev, studentExcel: validated[0] }))
         setUploadStatus(`✓ 엑셀 파일 업로드 완료: ${validated[0].name}`)
       }
     } else if (category === 'videos') {
       const validated = validateFiles(selectedFiles, 'video')
-      setFiles(prev => ({ ...prev, videos: [...prev.videos, ...validated] }))
+      setUploadedFiles(prev => ({ ...prev, videos: [...uploadedFiles.videos, ...validated] }))
       setUploadStatus(`✓ ${validated.length}개 영상 파일 추가됨`)
     } else {
       const validated = validateFiles(selectedFiles, 'photo')
-      setFiles(prev => ({ ...prev, [category]: [...prev[category], ...validated] }))
+      setUploadedFiles(prev => ({ ...prev, [category]: [...uploadedFiles[category], ...validated] }))
       setUploadStatus(`✓ ${validated.length}개 사진 파일 추가됨`)
     }
 
@@ -101,9 +90,9 @@ export const Upload: React.FC = () => {
   // 파일 제거
   const removeFile = (category: keyof UploadedFiles, index?: number) => {
     if (category === 'studentExcel') {
-      setFiles(prev => ({ ...prev, studentExcel: null }))
+      setUploadedFiles(prev => ({ ...prev, studentExcel: null }))
     } else {
-      setFiles(prev => ({
+      setUploadedFiles(prev => ({
         ...prev,
         [category]: prev[category].filter((_, i) => i !== index)
       }))
@@ -113,8 +102,8 @@ export const Upload: React.FC = () => {
   // 모든 파일 초기화
   const clearAllFiles = () => {
     if (window.confirm('모든 업로드된 파일을 삭제하시겠습니까?')) {
-      setFiles({
-        photos: [],
+      setUploadedFiles({
+        groupPhotos: [],
         videos: [],
         idPhotos: [],
         babyPhotos: [],
@@ -135,8 +124,8 @@ export const Upload: React.FC = () => {
   }
 
   // 전체 파일 수 계산
-  const totalFiles = files.photos.length + files.videos.length + files.idPhotos.length +
-                     files.babyPhotos.length + (files.studentExcel ? 1 : 0)
+  const totalFiles = uploadedFiles.groupPhotos.length + uploadedFiles.videos.length +  uploadedFiles.idPhotos.length +
+                     uploadedFiles.babyPhotos.length + (uploadedFiles.studentExcel ? 1 : 0)
 
   return (
     <div className="upload-container">
@@ -164,30 +153,30 @@ export const Upload: React.FC = () => {
           <div className="progress-grid">
             <div className="progress-item">
               <span className="progress-label">📸 행사 사진</span>
-              <span className="progress-count">{files.photos.length}장</span>
+              <span className="progress-count">{uploadedFiles.groupPhotos.length}장</span>
             </div>
             <div className="progress-item">
               <span className="progress-label">🎬 영상 클립</span>
-              <span className="progress-count">{files.videos.length}개</span>
+              <span className="progress-count">{uploadedFiles.videos.length}개</span>
             </div>
             <div className="progress-item">
               <span className="progress-label">👤 증명사진</span>
-              <span className="progress-count">{files.idPhotos.length}장</span>
+              <span className="progress-count">{uploadedFiles.idPhotos.length}장</span>
             </div>
             <div className="progress-item">
               <span className="progress-label">👶 어릴때 사진</span>
-              <span className="progress-count">{files.babyPhotos.length}장</span>
+              <span className="progress-count">{uploadedFiles.babyPhotos.length}장</span>
             </div>
             <div className="progress-item">
               <span className="progress-label">📋 학생정보</span>
-              <span className="progress-count">{files.studentExcel ? '✓' : '✗'}</span>
+              <span className="progress-count">{uploadedFiles.studentExcel ? '✓' : '✗'}</span>
             </div>
           </div>
         </div>
 
         {/* 1. 행사/일상 사진 */}
         <section className="upload-section">
-          <h3>📸 행사/일상 사진 ({files.photos.length}장)</h3>
+          <h3>📸 행사/일상 사진 ({uploadedFiles.groupPhotos.length}장)</h3>
           <p className="section-description">
             운동회, 소풍, 수학여행, 학예회 등의 사진 (100-300장 권장)
           </p>
@@ -211,9 +200,9 @@ export const Upload: React.FC = () => {
             />
           </div>
 
-          {files.photos.length > 0 && (
+          {uploadedFiles.groupPhotos.length > 0 && (
             <div className="file-list">
-              {files.photos.slice(0, 5).map((file, index) => (
+              {uploadedFiles.groupPhotos.slice(0, 5).map((file, index) => (
                 <div key={index} className="file-item">
                   <span className="file-name">{file.name}</span>
                   <span className="file-size">{formatFileSize(file.size)}</span>
@@ -225,9 +214,9 @@ export const Upload: React.FC = () => {
                   </button>
                 </div>
               ))}
-              {files.photos.length > 5 && (
+              {uploadedFiles.groupPhotos.length > 5 && (
                 <div className="file-item-more">
-                  외 {files.photos.length - 5}개 파일...
+                  외 {uploadedFiles.groupPhotos.length - 5}개 파일...
                 </div>
               )}
             </div>
@@ -236,7 +225,7 @@ export const Upload: React.FC = () => {
 
         {/* 2. 영상 클립 */}
         <section className="upload-section">
-          <h3>🎬 영상 클립 ({files.videos.length}개)</h3>
+          <h3>🎬 영상 클립 ({uploadedFiles.videos.length}개)</h3>
           <p className="section-description">
             체육대회, 학예회 등의 영상 (5-10개 권장)
           </p>
@@ -260,9 +249,9 @@ export const Upload: React.FC = () => {
             />
           </div>
 
-          {files.videos.length > 0 && (
+          {uploadedFiles.videos.length > 0 && (
             <div className="file-list">
-              {files.videos.map((file, index) => (
+              {uploadedFiles.videos.map((file, index) => (
                 <div key={index} className="file-item">
                   <span className="file-name">{file.name}</span>
                   <span className="file-size">{formatFileSize(file.size)}</span>
@@ -280,7 +269,7 @@ export const Upload: React.FC = () => {
 
         {/* 3. 증명사진 */}
         <section className="upload-section">
-          <h3>👤 증명사진 ({files.idPhotos.length}장)</h3>
+          <h3>👤 증명사진 ({uploadedFiles.idPhotos.length}장)</h3>
           <p className="section-description">
             학생 전체 증명사진 (파일명 = 학생 이름, 예: 홍길동.jpg)
           </p>
@@ -304,9 +293,9 @@ export const Upload: React.FC = () => {
             />
           </div>
 
-          {files.idPhotos.length > 0 && (
+          {uploadedFiles.idPhotos.length > 0 && (
             <div className="file-list">
-              {files.idPhotos.slice(0, 5).map((file, index) => (
+              {uploadedFiles.idPhotos.slice(0, 5).map((file, index) => (
                 <div key={index} className="file-item">
                   <span className="file-name">{file.name}</span>
                   <span className="file-size">{formatFileSize(file.size)}</span>
@@ -318,9 +307,9 @@ export const Upload: React.FC = () => {
                   </button>
                 </div>
               ))}
-              {files.idPhotos.length > 5 && (
+              {uploadedFiles.idPhotos.length > 5 && (
                 <div className="file-item-more">
-                  외 {files.idPhotos.length - 5}개 파일...
+                  외 {uploadedFiles.idPhotos.length - 5}개 파일...
                 </div>
               )}
             </div>
@@ -329,7 +318,7 @@ export const Upload: React.FC = () => {
 
         {/* 4. 어릴 때 사진 */}
         <section className="upload-section">
-          <h3>👶 어릴 때 사진 ({files.babyPhotos.length}장)</h3>
+          <h3>👶 어릴 때 사진 ({uploadedFiles.babyPhotos.length}장)</h3>
           <p className="section-description">
             유치원 시절 또는 초등 1학년 사진 (파일명 = 학생 이름)
           </p>
@@ -353,9 +342,9 @@ export const Upload: React.FC = () => {
             />
           </div>
 
-          {files.babyPhotos.length > 0 && (
+          {uploadedFiles.babyPhotos.length > 0 && (
             <div className="file-list">
-              {files.babyPhotos.slice(0, 5).map((file, index) => (
+              {uploadedFiles.babyPhotos.slice(0, 5).map((file, index) => (
                 <div key={index} className="file-item">
                   <span className="file-name">{file.name}</span>
                   <span className="file-size">{formatFileSize(file.size)}</span>
@@ -367,9 +356,9 @@ export const Upload: React.FC = () => {
                   </button>
                 </div>
               ))}
-              {files.babyPhotos.length > 5 && (
+              {uploadedFiles.babyPhotos.length > 5 && (
                 <div className="file-item-more">
-                  외 {files.babyPhotos.length - 5}개 파일...
+                  외 {uploadedFiles.babyPhotos.length - 5}개 파일...
                 </div>
               )}
             </div>
@@ -378,7 +367,7 @@ export const Upload: React.FC = () => {
 
         {/* 5. 학생 정보 엑셀 */}
         <section className="upload-section">
-          <h3>📋 학생 정보 엑셀 {files.studentExcel && '(✓ 업로드 완료)'}</h3>
+          <h3>📋 학생 정보 엑셀 {uploadedFiles.studentExcel && '(✓ 업로드 완료)'}</h3>
           <p className="section-description">
             컬럼: 이름, 어릴때사진경로, 장래희망
           </p>
@@ -401,11 +390,11 @@ export const Upload: React.FC = () => {
             />
           </div>
 
-          {files.studentExcel && (
+          {uploadedFiles.studentExcel && (
             <div className="file-list">
               <div className="file-item">
-                <span className="file-name">{files.studentExcel.name}</span>
-                <span className="file-size">{formatFileSize(files.studentExcel.size)}</span>
+                <span className="file-name">{uploadedFiles.studentExcel.name}</span>
+                <span className="file-size">{formatFileSize(uploadedFiles.studentExcel.size)}</span>
                 <button
                   onClick={() => removeFile('studentExcel')}
                   className="btn-remove"
@@ -425,12 +414,12 @@ export const Upload: React.FC = () => {
                 ⚠️ 업로드된 파일이 없습니다
               </div>
             )}
-            {totalFiles > 0 && !files.studentExcel && (
+            {totalFiles > 0 && !uploadedFiles.studentExcel && (
               <div className="warning-box">
                 ⚠️ 학생 정보 엑셀 파일이 필요합니다
               </div>
             )}
-            {totalFiles > 0 && files.studentExcel && (
+            {totalFiles > 0 && uploadedFiles.studentExcel && (
               <div className="success-box">
                 ✓ 파일 업로드 완료! 다음 단계로 진행하세요
               </div>
@@ -439,7 +428,12 @@ export const Upload: React.FC = () => {
 
           <button
             className="btn btn-primary btn-large"
-            disabled={totalFiles === 0 || !files.studentExcel}
+            disabled={totalFiles === 0 || !uploadedFiles.studentExcel}
+            onClick={() => {
+              if (totalFiles > 0 && uploadedFiles.studentExcel) {
+                onNext()
+              }
+            }}
           >
             다음: 시나리오 생성 →
           </button>

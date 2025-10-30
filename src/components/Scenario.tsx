@@ -4,7 +4,11 @@ import { useApp } from '../contexts/AppContext'
 import { Scenario as ScenarioType, Scene } from '../types'
 import './Scenario.css'
 
-export const Scenario: React.FC = () => {
+interface Props {
+  onNext: () => void
+}
+
+export const Scenario: React.FC<Props> = ({ onNext }) => {
   const { settings, scenario, setScenario, isLoading, setIsLoading, setError } = useApp()
   const [generatingStatus, setGeneratingStatus] = useState<string>('')
 
@@ -392,7 +396,10 @@ export const Scenario: React.FC = () => {
                   다음 단계에서 영상을 렌더링합니다 (예상 시간: {Math.ceil(totalDuration / 60 * 2)}분)
                 </p>
               </div>
-              <button className="btn btn-primary btn-large">
+              <button 
+                className="btn btn-primary btn-large"
+                onClick={onNext}
+              >
                 다음: 렌더링 →
               </button>
             </div>
