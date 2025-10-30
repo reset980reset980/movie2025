@@ -1,6 +1,7 @@
 // electron/main.ts
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'path'
+import { spawn, ChildProcess } from 'child_process'
 import Store from 'electron-store'
 import { AppSettings } from '../src/types'
 
@@ -15,6 +16,108 @@ const store = new Store<AppSettings>({
 })
 
 let mainWindow: BrowserWindow | null = null
+let pythonProcess: ChildProcess | null = null
+
+// Python 프로세스 관리
+class PythonBridge {
+  private process: ChildProcess | null = null
+  private messageQueue: Map<number, { resolve: Function; reject: Function }> = new Map()
+  private messageId = 0
+
+  start() {
+    if (this.process) {
+      console.log('[Python] 이미 실행 중입니다')
+      return
+    }
+
+    const pythonPath = 'python' // 시스템 Python 사용
+    const scriptPath = path.join(__dirname, '../python/main.py')
+
+    console.log('[Python] 프로세스 시작:', scriptPath)
+
+    this.process = spawn(pythonPath, [scriptPath], {
+      cwd: path.join(__dirname, '../python'),
+      env: { ...process.env, PYTHONUNBUFFERED: '1' }
+    })
+
+    // stdout 처리 (JSON 응답)
+    this.process.stdout?.on('data', (data) => {
+      const lines = data.toString().split('\n').filter((line: string) => line.trim())
+
+      for (const line of lines) {
+        try {
+          const response = JSON.parse(line)
+
+          // 진행률 업데이트
+          if (response.type === 'progress') {
+            mainWindow?.webContents.send('render:progress', response.data)
+            continue
+          }
+
+          // 일반 응답 처리 (TODO: messageId 매칭 로직 추가 필요)
+          const callbacks = Array.from(this.messageQueue.values())
+          if (callbacks.length > 0) {
+            const { resolve } = callbacks[0]
+            this.messageQueue.clear()
+            resolve(response)
+          }
+        } catch (e) {
+          console.error('[Python] JSON 파싱 오류:', line)
+        }
+      }
+    })
+
+    // stderr 처리 (로그)
+    this.process.stderr?.on('data', (data) => {
+      console.log('[Python stderr]', data.toString())
+    })
+
+    // 프로세스 종료
+    this.process.on('close', (code) => {
+      console.log(`[Python] 프로세스 종료됨 (코드: ${code})`)
+      this.process = null
+
+      // 대기 중인 프로미스 모두 거부
+      this.messageQueue.forEach(({ reject }) => {
+        reject(new Error('Python 프로세스가 종료되었습니다'))
+      })
+      this.messageQueue.clear()
+    })
+  }
+
+  stop() {
+    if (this.process) {
+      this.process.kill()
+      this.process = null
+    }
+  }
+
+  async call(command: string, data: any): Promise<any> {
+    if (!this.process) {
+      this.start()
+      // 프로세스 시작 대기
+      await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+
+    return new Promise((resolve, reject) => {
+      const msgId = this.messageId++
+      this.messageQueue.set(msgId, { resolve, reject })
+
+      const message = JSON.stringify({ command, data })
+      this.process?.stdin?.write(message + '\n')
+
+      // 타임아웃 (60초)
+      setTimeout(() => {
+        if (this.messageQueue.has(msgId)) {
+          this.messageQueue.delete(msgId)
+          reject(new Error('Python 응답 타임아웃'))
+        }
+      }, 60000)
+    })
+  }
+}
+
+const pythonBridge = new PythonBridge()
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -43,12 +146,14 @@ function createWindow() {
 
   mainWindow.on('closed', () => {
     mainWindow = null
+    pythonBridge.stop()
   })
 }
 
 // 앱 준비 완료
 app.whenReady().then(() => {
   createWindow()
+  pythonBridge.start()
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -59,6 +164,7 @@ app.whenReady().then(() => {
 
 // 모든 창이 닫혔을 때
 app.on('window-all-closed', () => {
+  pythonBridge.stop()
   if (process.platform !== 'darwin') {
     app.quit()
   }
@@ -96,7 +202,6 @@ ipcMain.handle('settings:load', async () => {
 
 // 파일 선택 대화상자
 ipcMain.handle('dialog:openFile', async (event, options) => {
-  const { dialog } = require('electron')
   try {
     const result = await dialog.showOpenDialog(mainWindow!, options)
     return { success: true, data: result }
@@ -110,7 +215,6 @@ ipcMain.handle('dialog:openFile', async (event, options) => {
 
 // 폴더 선택 대화상자
 ipcMain.handle('dialog:openDirectory', async () => {
-  const { dialog } = require('electron')
   try {
     const result = await dialog.showOpenDialog(mainWindow!, {
       properties: ['openDirectory']
@@ -124,33 +228,43 @@ ipcMain.handle('dialog:openDirectory', async () => {
   }
 })
 
-// Python 프로세스 관리 (추후 구현)
-ipcMain.handle('python:start', async () => {
-  // TODO: Python 프로세스 시작
-  return { success: true, data: 'Python 프로세스 시작됨' }
-})
-
-ipcMain.handle('python:stop', async () => {
-  // TODO: Python 프로세스 종료
-  return { success: true, data: 'Python 프로세스 종료됨' }
-})
-
-// Gemini 시나리오 생성 (추후 구현)
+// Gemini 시나리오 생성
 ipcMain.handle('python:generateScenario', async (event, data) => {
-  // TODO: Python 백엔드로 전달
-  return {
-    success: false,
-    error: '아직 구현되지 않음'
+  try {
+    const response = await pythonBridge.call('generate_scenario', data)
+    return response
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : '시나리오 생성 실패'
+    }
   }
 })
 
-// 영상 렌더링 (추후 구현)
+// 영상 렌더링
 ipcMain.handle('python:renderVideo', async (event, data) => {
-  // TODO: Python 백엔드로 전달
-  return {
-    success: false,
-    error: '아직 구현되지 않음'
+  try {
+    const response = await pythonBridge.call('render_video', data)
+    return response
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : '렌더링 실패'
+    }
   }
 })
 
-console.log('Electron 메인 프로세스 시작됨')
+// Python 프로세스 상태 확인
+ipcMain.handle('python:ping', async () => {
+  try {
+    const response = await pythonBridge.call('ping', {})
+    return response
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Python 프로세스 응답 없음'
+    }
+  }
+})
+
+console.log('[Electron] 메인 프로세스 시작됨')
