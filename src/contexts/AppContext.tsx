@@ -39,9 +39,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [settings, setSettings] = useState<AppSettings>({
     geminiApiKey: '',
     schoolName: '',
-    renderPreset: 'high',
-    useFlux: false
-  })
+    renderPreset: 'high'})
 
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFiles>({
     groupPhotos: [],

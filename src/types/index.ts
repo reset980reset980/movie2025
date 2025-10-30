@@ -47,16 +47,12 @@ export interface RenderProgress {
 
 /** 앱 설정 */
 export interface AppSettings {
-  geminiApiKey: string;
-  fluxApiKey?: string;
-  schoolName: string;
+  geminiApiKey: string;      // Gemini API 키 (시나리오 생성 + 나노바나나 이미지 생성)  schoolName: string;
   schoolLogo?: string;
   backgroundMusic?: string;
-  renderPreset: 'high' | 'medium' | 'low';
-  useFlux: boolean;          // AI 이미지 생성 사용 여부
-}
+  renderPreset: 'high' | 'medium' | 'low';}
 
-n/** 업로드된 파일 정보 */
+/** 업로드된 파일 정보 */
 export interface UploadedFiles {
   groupPhotos: File[]       // 단체 사진
   videos: File[]            // 영상 클립

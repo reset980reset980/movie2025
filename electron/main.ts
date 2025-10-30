@@ -10,8 +10,7 @@ const store = new Store<AppSettings>({
   defaults: {
     geminiApiKey: '',
     schoolName: '',
-    renderPreset: 'high',
-    useFlux: false
+    renderPreset: 'high'
   }
 })
 
@@ -150,17 +149,33 @@ function createWindow() {
   })
 }
 
-// 앱 준비 완료
-app.whenReady().then(() => {
-  createWindow()
-  pythonBridge.start()
+// Single Instance Lock - 중복 실행 방지
+const gotTheLock = app.requestSingleInstanceLock()
 
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
+if (!gotTheLock) {
+  console.log('[Electron] 이미 실행 중입니다. 종료합니다.')
+  app.quit()
+} else {
+  app.on('second-instance', () => {
+    // 이미 실행 중일 때 창 포커스
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
     }
   })
-})
+
+  // 앱 준비 완료
+  app.whenReady().then(() => {
+    createWindow()
+    pythonBridge.start()
+
+    app.on('activate', () => {
+      if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow()
+      }
+    })
+  })
+}
 
 // 모든 창이 닫혔을 때
 app.on('window-all-closed', () => {

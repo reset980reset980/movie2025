@@ -1,6 +1,7 @@
 // src/components/Upload.tsx
 import React, { useState } from 'react'
 import { useApp } from '../contexts/AppContext'
+import { UploadedFiles } from '../types'
 import './Upload.css'
 
 interface Props {
@@ -46,11 +47,11 @@ export const Upload: React.FC<Props> = ({ onNext }) => {
       }
     } else if (category === 'videos') {
       const validated = validateFiles(droppedFiles, 'video')
-      setUploadedFiles(prev => ({ ...prev, videos: [...uploadedFiles.videos, ...validated] }))
+      setUploadedFiles(prev => ({ ...prev, videos: [...prev.videos, ...validated] }))
       setUploadStatus(`✓ ${validated.length}개 영상 파일 추가됨`)
     } else {
       const validated = validateFiles(droppedFiles, 'photo')
-      setUploadedFiles(prev => ({ ...prev, [category]: [...uploadedFiles[category], ...validated] }))
+      setUploadedFiles(prev => ({ ...prev, [category]: [...prev[category], ...validated] }))
       setUploadStatus(`✓ ${validated.length}개 사진 파일 추가됨`)
     }
 
@@ -75,11 +76,11 @@ export const Upload: React.FC<Props> = ({ onNext }) => {
       }
     } else if (category === 'videos') {
       const validated = validateFiles(selectedFiles, 'video')
-      setUploadedFiles(prev => ({ ...prev, videos: [...uploadedFiles.videos, ...validated] }))
+      setUploadedFiles(prev => ({ ...prev, videos: [...prev.videos, ...validated] }))
       setUploadStatus(`✓ ${validated.length}개 영상 파일 추가됨`)
     } else {
       const validated = validateFiles(selectedFiles, 'photo')
-      setUploadedFiles(prev => ({ ...prev, [category]: [...uploadedFiles[category], ...validated] }))
+      setUploadedFiles(prev => ({ ...prev, [category]: [...prev[category], ...validated] }))
       setUploadStatus(`✓ ${validated.length}개 사진 파일 추가됨`)
     }
 
@@ -183,7 +184,7 @@ export const Upload: React.FC<Props> = ({ onNext }) => {
 
           <div
             className="dropzone"
-            onDrop={(e) => handleDrop(e, 'photos')}
+            onDrop={(e) => handleDrop(e, 'groupPhotos')}
             onDragOver={handleDragOver}
           >
             <div className="dropzone-content">
@@ -195,7 +196,7 @@ export const Upload: React.FC<Props> = ({ onNext }) => {
               type="file"
               multiple
               accept=".jpg,.jpeg,.png"
-              onChange={(e) => handleFileSelect(e, 'photos')}
+              onChange={(e) => handleFileSelect(e, 'groupPhotos')}
               className="file-input"
             />
           </div>
@@ -207,7 +208,7 @@ export const Upload: React.FC<Props> = ({ onNext }) => {
                   <span className="file-name">{file.name}</span>
                   <span className="file-size">{formatFileSize(file.size)}</span>
                   <button
-                    onClick={() => removeFile('photos', index)}
+                    onClick={() => removeFile('groupPhotos', index)}
                     className="btn-remove"
                   >
                     ✕

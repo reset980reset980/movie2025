@@ -82,40 +82,10 @@ export const Settings: React.FC = () => {
             <small className="form-help">
               <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener noreferrer">
                 여기서 발급 받기 →
-              </a> (무료, 월 60회)
+              </a> (무료, 월 60회) - 시나리오 생성 + 나노바나나 이미지 생성
             </small>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="fluxApiKey">
-              Flux API 키 <span className="optional">(선택)</span>
-            </label>
-            <input
-              type="password"
-              id="fluxApiKey"
-              value={localSettings.fluxApiKey || ''}
-              onChange={(e) => handleChange('fluxApiKey', e.target.value)}
-              placeholder="Flux API 키 입력 (미래 이미지 생성용)"
-              className="form-input"
-            />
-            <small className="form-help">
-              AI 미래 이미지 생성 기능 (유료, 약 $0.003/학생)
-            </small>
-          </div>
-
-          <div className="form-group checkbox-group">
-            <label>
-              <input
-                type="checkbox"
-                checked={localSettings.useFlux}
-                onChange={(e) => handleChange('useFlux', e.target.checked)}
-              />
-              <span>AI 미래 이미지 생성 사용</span>
-            </label>
-            <small className="form-help">
-              비활성화 시 템플릿 이미지 사용 (완전 무료)
-            </small>
-          </div>
         </section>
 
         {/* 학교 정보 섹션 */}

@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const Scenario: React.FC<Props> = ({ onNext }) => {
-  const { settings, scenario, setScenario, isLoading, setIsLoading, setError } = useApp()
+  const { settings, scenario, setScenario, isLoading, setIsLoading, setError, uploadedFiles } = useApp()
   const [generatingStatus, setGeneratingStatus] = useState<string>('')
 
   // 시나리오 생성
@@ -23,17 +23,27 @@ export const Scenario: React.FC<Props> = ({ onNext }) => {
     setGeneratingStatus('사진 분석 중...')
 
     try {
-      // TODO: 실제 파일 정보 가져오기
-      const mockData = {
-        photos: ['photo1.jpg', 'photo2.jpg', 'photo3.jpg'], // 실제로는 업로드된 파일 목록
-        videos: ['video1.mp4', 'video2.mp4'],
+      // 업로드된 파일 정보 수집
+      const photoFiles = [
+        ...uploadedFiles.groupPhotos,
+        ...uploadedFiles.idPhotos,
+        ...uploadedFiles.babyPhotos
+      ]
+      
+      if (photoFiles.length === 0) {
+        throw new Error('사진을 최소 1개 이상 업로드해주세요.')
+      }
+      
+      const requestData = {
+        photos: photoFiles.map(f => f.name),
+        videos: uploadedFiles.videos.map(f => f.name),
         apiKey: settings.geminiApiKey
       }
 
       setGeneratingStatus('Gemini AI 시나리오 생성 중...')
 
       // Python 백엔드 호출
-      const response = await window.electronAPI.python.generateScenario(mockData)
+      const response = await window.electronAPI.python.generateScenario(requestData)
 
       if (response.success && response.data) {
         setScenario(response.data)
