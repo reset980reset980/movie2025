@@ -68,3 +68,6 @@ uploads/
 
 # 렌더링 출력
 GraduationVideos/
+
+# Claude Code 로컬 설정
+.claude/
