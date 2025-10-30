@@ -52,9 +52,9 @@ function AppContent() {
 
       {/* 탭 콘텐츠 */}
       <main className="app-content">
-        {activeTab === 'settings' && <Settings />}
-        {activeTab === 'upload' && <Upload />}
-        {activeTab === 'scenario' && <Scenario />}
+        {activeTab === 'settings' && <Settings onNext={() => setActiveTab('upload')} />}
+        {activeTab === 'upload' && <Upload onNext={() => setActiveTab('scenario')} />}
+        {activeTab === 'scenario' && <Scenario onNext={() => setActiveTab('render')} />}
         {activeTab === 'render' && <Render />}
       </main>
 

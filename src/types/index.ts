@@ -56,6 +56,14 @@ export interface AppSettings {
   useFlux: boolean;          // AI 이미지 생성 사용 여부
 }
 
+n/** 업로드된 파일 정보 */
+export interface UploadedFiles {
+  groupPhotos: File[]       // 단체 사진
+  videos: File[]            // 영상 클립
+  studentExcel: File | null // 학생 명단 엑셀
+  babyPhotos: File[]        // 어릴 때 사진
+  idPhotos: File[]          // 증명사진
+}
 /** 파일 업로드 결과 */
 export interface UploadResult {
   success: boolean;

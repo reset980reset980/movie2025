@@ -1,12 +1,16 @@
 // src/contexts/AppContext.tsx
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { AppSettings, Scenario, RenderProgress } from '../types'
+import { AppSettings, Scenario, RenderProgress, UploadedFiles } from '../types'
 
 interface AppContextType {
   // 설정
   settings: AppSettings
   updateSettings: (newSettings: Partial<AppSettings>) => Promise<void>
   loadSettings: () => Promise<void>
+
+  // 업로드된 파일
+  uploadedFiles: UploadedFiles
+  setUploadedFiles: (files: UploadedFiles) => void
 
   // 시나리오
   scenario: Scenario | null
@@ -37,6 +41,14 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     schoolName: '',
     renderPreset: 'high',
     useFlux: false
+  })
+
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFiles>({
+    groupPhotos: [],
+    videos: [],
+    studentExcel: null,
+    babyPhotos: [],
+    idPhotos: []
   })
 
   const [scenario, setScenario] = useState<Scenario | null>(null)
@@ -91,6 +103,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     settings,
     updateSettings,
     loadSettings,
+    uploadedFiles,
+    setUploadedFiles,
     scenario,
     setScenario,
     renderProgress,
